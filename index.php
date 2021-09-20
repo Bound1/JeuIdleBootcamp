@@ -10,6 +10,9 @@
 <body>
 <?php
 session_start();
+function arrondir_dollars($value){
+	return floor($value*100)/100;
+}
 function achat($nombre_magasins_tableau,$prix_tableau,$argent_restant){
 	$argent=$argent_restant;
 	for($index=0;$index<count($nombre_magasins_tableau);$index++){
@@ -19,6 +22,7 @@ function achat($nombre_magasins_tableau,$prix_tableau,$argent_restant){
 			$argent=$argent_restant;	
 		}
 	}
+	$argent=arrondir_dollars($argent);
 	$_SESSION["argent"]=$argent;
 	return true;
 }
@@ -34,7 +38,8 @@ function actualiser_page($initialisation=false){
 	else{
 		$nombre_total_de_magasins=5;
 		$magasins=array("Stand de limonade","Médias", "Nettoyage de voiture", "Pizza", "Magasin de donut");	
-		$argent=100;
+		$gains_par_seconde=array();
+		$argent=100.0;
 		$magasins_possedes=array();
 		$magasin_a_acheter=array();
 		$prix_du_magasin=array();
@@ -42,6 +47,7 @@ function actualiser_page($initialisation=false){
 			$magasins_possedes[$index]=0; //Initialisation de la valeur des magasins.
 			$magasin_a_acheter[$index]=0;//Initialisation du nombre de magasin de ce type qu'on achète.
 			$prix_du_magasin[$index]=pow(10,$index); // Initialisation des prix.
+			$gains_par_seconde[$index]=$prix_du_magasin[$index]/2;
 		}
 	}
 	echo "<strong> Argent :  </strong>";
@@ -65,6 +71,7 @@ function actualiser_page($initialisation=false){
 	echo "<form action=\"index.php\" method=\"post\" >";
 	echo "<input type=\"submit\" name=\"restart\" value=\"Recommencer le jeu.\">";
 	echo "</form>";
+	$_SESSION["deja_initialise"]=true;
 	$_SESSION["argent"]=$argent;
 	$_SESSION["magasins_possedes"]=$magasins_possedes;
 	$_SESSION["magasins"]=$magasins;
@@ -72,7 +79,12 @@ function actualiser_page($initialisation=false){
 	$_SESSION["nombre_total_de_magasins"]=$nombre_total_de_magasins;
 }
 if(!isset($_POST["restart"]) && !isset($_POST["magasin_a_acheter"])){ // Si l'initialiser se fait la première fois..
-	actualiser_page($initialisation=true);	
+	if(!isset($_SESSION["deja_initialise"])){
+		actualiser_page($initialisation=true);
+	}
+	else{
+		actualiser_page();	
+	}	
 }
 if(isset($_POST["restart"])){
 	actualiser_page($initialisation=true);
