@@ -14,9 +14,9 @@ function achat($nombre_magasins_tableau,$prix_tableau,$argent_restant){
 	$argent=$argent_restant;
 	for($index=0;$index<count($nombre_magasins_tableau);$index++){
 		$argent = $argent-$nombre_magasins_tableau[$index]*$prix_tableau[$index];
+		$_SESSION["magasins_possedes"][$index]+=$nombre_magasins_tableau[$index];
 		if($argent<0){
-			$argent=$argent_restant;
-			return false;		
+			$argent=$argent_restant;	
 		}
 	}
 	$_SESSION["argent"]=$argent;
@@ -29,6 +29,7 @@ function actualiser_page($initialisation=false){
 		$magasins=$_SESSION["magasins"];
 		$prix_du_magasin=$_SESSION["prix_du_magasin"];
 		$nombre_total_de_magasins=$_SESSION["nombre_total_de_magasins"];	
+		
 	}
 	else{
 		$nombre_total_de_magasins=5;
@@ -64,7 +65,6 @@ function actualiser_page($initialisation=false){
 	echo "<form action=\"index.php\" method=\"post\" >";
 	echo "<input type=\"submit\" name=\"restart\" value=\"Recommencer le jeu.\">";
 	echo "</form>";
-	$_SESSION["deja_initialise"]=true;
 	$_SESSION["argent"]=$argent;
 	$_SESSION["magasins_possedes"]=$magasins_possedes;
 	$_SESSION["magasins"]=$magasins;
@@ -78,15 +78,13 @@ if(isset($_POST["restart"])){
 	actualiser_page($initialisation=true);
 }
 if(isset($_POST["magasin_a_acheter"])){
-	var_dump($_SESSION);
 	$argent=$_SESSION["argent"];
 	$magasins_possedes=$_SESSION["magasins_possedes"];
 	$magasins=$_SESSION["magasins"];
 	$prix_du_magasin=$_SESSION["prix_du_magasin"];
 	$nombre_total_de_magasins=$_SESSION["nombre_total_de_magasins"];
-	if(achat($_POST["magasin_a_acheter"],$prix_du_magasin,$argent)){
-		actualiser_page();
-	}
+	achat($_POST["magasin_a_acheter"],$prix_du_magasin,$argent);
+	actualiser_page();
 }
 ?>
 </body>
