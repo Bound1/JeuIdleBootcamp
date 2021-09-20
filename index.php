@@ -10,18 +10,20 @@
 <body>
 <?php
 session_start();
-function peut_acheter($nombre_magasins_tableau,$prix_tableau,$argent_restant){
+function achat($nombre_magasins_tableau,$prix_tableau,$argent_restant){
 	$argent=$argent_restant;
 	for($index=0;$index<count($nombre_magasins_tableau);$index++){
 		$argent = $argent-$nombre_magasins_tableau[$index]*$prix_tableau[$index];
 		if($argent<0){
+			$argent=$argent_restant;
 			return false;		
 		}
 	}
+	$_SESSION["argent"]=$argent;
 	return true;
 }
 function actualiser_page($initialisation=false){
-	if(!$initialisation){
+	if($initialisation==false){
 		$argent=$_SESSION["argent"];
 		$magasins_possedes=$_SESSION["magasins_possedes"];
 		$magasins=$_SESSION["magasins"];
@@ -31,7 +33,10 @@ function actualiser_page($initialisation=false){
 	else{
 		$nombre_total_de_magasins=5;
 		$magasins=array("Stand de limonade","Médias", "Nettoyage de voiture", "Pizza", "Magasin de donut");	
-		$argent=1;
+		$argent=100;
+		$magasins_possedes=array();
+		$magasin_a_acheter=array();
+		$prix_du_magasin=array();
 		for($index=0;$index<$nombre_total_de_magasins;$index++){
 			$magasins_possedes[$index]=0; //Initialisation de la valeur des magasins.
 			$magasin_a_acheter[$index]=0;//Initialisation du nombre de magasin de ce type qu'on achète.
@@ -45,8 +50,8 @@ function actualiser_page($initialisation=false){
 	echo "<br>";
 	for($index=0;$index<$nombre_total_de_magasins;$index++){
 		echo $magasins[$index]." : ". "<br>"; // On affiche le texte lié au magasin.			
-		echo "<input type=\"number\" name=\"["."magasin_a_acheter[$index]"."]"; //On nomme le formulaire pour acheter des magasins.
-		echo " \" value=\"0\"/>"; //On assigne la valeur 0 à chacun des champs.
+		echo "<input type=\"number\" name=\""."magasin_a_acheter[$index]"; //On nomme le formulaire pour acheter des magasins.
+		echo "\" value=\"0\"/>"; //On assigne la valeur 0 à chacun des champs.
 		echo "<br>";
 		echo "Prix : ".$prix_du_magasin[$index]; // On affiche les prix du magasin.
 		echo "<br>";
@@ -66,17 +71,23 @@ function actualiser_page($initialisation=false){
 	$_SESSION["prix_du_magasin"]=$prix_du_magasin;
 	$_SESSION["nombre_total_de_magasins"]=$nombre_total_de_magasins;
 }
-if(!isset($_POST["restart"]) ){ // Si le paramètre magasin_a_acheter n'existe pas.
+if(!isset($_POST["restart"]) && !isset($_POST["magasin_a_acheter"])){ // Si l'initialiser se fait la première fois..
 	actualiser_page($initialisation=true);	
 }
-if(isset($_POST["restart"]) && $_POST["restart"]="Recommencer le jeu."){
-	session_destroy();
+if(isset($_POST["restart"])){
 	actualiser_page($initialisation=true);
 }
 if(isset($_POST["magasin_a_acheter"])){
-	actualiser_page();
+	var_dump($_SESSION);
+	$argent=$_SESSION["argent"];
+	$magasins_possedes=$_SESSION["magasins_possedes"];
+	$magasins=$_SESSION["magasins"];
+	$prix_du_magasin=$_SESSION["prix_du_magasin"];
+	$nombre_total_de_magasins=$_SESSION["nombre_total_de_magasins"];
+	if(achat($_POST["magasin_a_acheter"],$prix_du_magasin,$argent)){
+		actualiser_page();
+	}
 }
 ?>
-
 </body>
 </html>
