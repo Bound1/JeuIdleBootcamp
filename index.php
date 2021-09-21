@@ -39,10 +39,11 @@ function achat($nombre_magasins_tableau,$prix_tableau,$argent_restant){
 }
 function secondes_passes(){
 	$temps_initial=$_SESSION["temps_actualisation"];
-	$_SESSION["temps_actualisation"]=time();
-	$valeur_retourne=floor((time()-$temps_inital)/1000);
-	return floor((time()-$temps_inital)/1000);
-	var_dump($valeur_retourne-$_SESSION["argent"]);
+	$_SESSION["temps_actualisation"]=(int)getdate()[0];		
+	$temps_fin=getdate()[0];
+	$valeur_retourne=$temps_fin;
+	$valeur_retourne-=$temps_initial;
+	return $valeur_retourne;
 }
 function actualiser_page($initialisation=false){
 	if($initialisation==false){	
@@ -60,7 +61,7 @@ function actualiser_page($initialisation=false){
 		$magasins=array("Stand de limonade","Médias", "Nettoyage de voiture", "Pizza", "Magasin de donut");	
 		$gains_par_seconde=array();
 		$argent=1.0;
-		$temps_actualisation=time();
+		$temps_actualisation=getdate()[0];
 		$magasins_possedes=array();
 		$magasin_a_acheter=array();
 		$prix_du_magasin=array();
@@ -133,9 +134,9 @@ if(isset($_POST["magasin_a_acheter"])){
 if(isset($_POST["cliquer_pour_gain"])){
 	$_SESSION["argent"]+=$_SESSION["gain_par_clic"];
 }
-var_dump($_SESSION["magasins_possedes"]);
+$nombre_secondes_passes=secondes_passes();
 for($index=0;$index<$_SESSION["nombre_total_de_magasins"];$index++){
-	$_SESSION["argent"]+=$_SESSION["magasins_possedes"][$index]*$_SESSION["gains_par_seconde"][$index]*secondes_passes();
+	$_SESSION["argent"]+=$_SESSION["magasins_possedes"][$index]*$_SESSION["gains_par_seconde"][$index]*$nombre_secondes_passes;
 	
 }
 ?>
