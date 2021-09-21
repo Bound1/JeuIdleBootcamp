@@ -4,7 +4,7 @@
 <title>Mon jeu IDLE.</title>
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>	
 <script>
-/*function Update()
+function Update()
 {
 	$.post("index.php");   
 }
@@ -12,7 +12,6 @@
 $('document').ready(function(){
 	setInterval('Update();',3000);
 });
-*/
 </script>	
 <style type="text/css">
 .formulaire{
@@ -38,6 +37,13 @@ function achat($nombre_magasins_tableau,$prix_tableau,$argent_restant){
 	$_SESSION["argent"]=$argent;
 	return true;
 }
+function secondes_passes(){
+	$temps_initial=$_SESSION["temps_actualisation"];
+	$_SESSION["temps_actualisation"]=time();
+	$valeur_retourne=floor((time()-$temps_inital)/1000);
+	return floor((time()-$temps_inital)/1000);
+	var_dump($valeur_retourne-$_SESSION["argent"]);
+}
 function actualiser_page($initialisation=false){
 	if($initialisation==false){	
 		$argent=$_SESSION["argent"];
@@ -54,7 +60,7 @@ function actualiser_page($initialisation=false){
 		$magasins=array("Stand de limonade","Médias", "Nettoyage de voiture", "Pizza", "Magasin de donut");	
 		$gains_par_seconde=array();
 		$argent=1.0;
-		$temps_actualisation=getdate();
+		$temps_actualisation=time();
 		$magasins_possedes=array();
 		$magasin_a_acheter=array();
 		$prix_du_magasin=array();
@@ -104,8 +110,8 @@ function actualiser_page($initialisation=false){
 	echo "</form>";
 	echo "<p style=\"color:red\">Cette action est irréversible.</p>";
 }
-if(empty($_POST["restart"]) && empty($_POST["magasin_a_acheter"])){ // Si l'initialiser se fait la première fois..
-	if(empty($_SESSION["deja_initialise"])){	
+if(!isset($_POST["restart"]) && !isset($_POST["magasin_a_acheter"])){ // Si l'initialiser se fait la première fois..
+	if(!isset($_SESSION["deja_initialise"])){	
 		actualiser_page($initialisation=true);
 	}	
 	else{
@@ -125,10 +131,13 @@ if(isset($_POST["magasin_a_acheter"])){
 	actualiser_page();
 }
 if(isset($_POST["cliquer_pour_gain"])){
-	var_dump($_SESSION["argent"]);
 	$_SESSION["argent"]+=$_SESSION["gain_par_clic"];
 }
-
+var_dump($_SESSION["magasins_possedes"]);
+for($index=0;$index<$_SESSION["nombre_total_de_magasins"];$index++){
+	$_SESSION["argent"]+=$_SESSION["magasins_possedes"][$index]*$_SESSION["gains_par_seconde"][$index]*secondes_passes();
+	
+}
 ?>
 </body>
 </html>
