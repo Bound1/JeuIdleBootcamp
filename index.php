@@ -26,7 +26,8 @@ function achat($nombre_magasins_tableau,$prix_tableau,$argent_restant){
 	$_SESSION["argent"]=$argent;
 	return true;
 }
-function mettre_a_jour_session(){	
+function actualiser_page($initialisation=false){
+	if($initialisation==false){	
 		$argent=$_SESSION["argent"];
 		$magasins_possedes=$_SESSION["magasins_possedes"];
 		$magasins=$_SESSION["magasins"];
@@ -34,10 +35,6 @@ function mettre_a_jour_session(){
 		$nombre_total_de_magasins=$_SESSION["nombre_total_de_magasins"];
 		$gains_par_seconde=$_SESSION["gains_par_seconde"];
 		$temps_total_timestamp=$_SESSION["temps_total_timestamp"];
-}
-function actualiser_page($initialisation=false){
-	if($initialisation==false){	
-		mettre_a_jour_session();
 	}
 	else{
 		$nombre_total_de_magasins=5;
@@ -79,15 +76,16 @@ function actualiser_page($initialisation=false){
 	echo "<input type=\"submit\" name=\"restart\" value=\"Recommencer le jeu.\">";
 	echo "</form>";
 	echo "<p style=\"color:red\">Cette action est irréversible.</p>";
-	mettre_a_jour_session();
+	$_SESSION["argent"]=$argent;
+	$_SESSION["magasins_possedes"]=$magasins_possedes;
+	$_SESSION["magasins"]=$magasins;
+	$_SESSION["prix_du_magasin"]=$prix_du_magasin;
+	$_SESSION["nombre_total_de_magasins"]=$nombre_total_de_magasins;
+	$_SESSION["gains_par_seconde"]=$gains_par_seconde;
+	$_SESSION["temps_total_timestamp"]=$temps_total_timestamp;
 }
 if(!isset($_POST["restart"]) && !isset($_POST["magasin_a_acheter"])){ // Si l'initialiser se fait la première fois..
-	if(!isset($_SESSION["deja_initialise"])){
-		actualiser_page($initialisation=true);
-	}
-	else{
-		actualiser_page();	
-	}	
+	actualiser_page($initialisation=true);
 }
 if(isset($_POST["restart"])){
 	actualiser_page($initialisation=true);
