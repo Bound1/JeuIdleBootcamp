@@ -76,6 +76,7 @@ function actualiser_page($initialisation=false){
 	echo "<input type=\"submit\" name=\"restart\" value=\"Recommencer le jeu.\">";
 	echo "</form>";
 	echo "<p style=\"color:red\">Cette action est irréversible.</p>";
+	$_SESSION["deja_initialise"]=true;
 	$_SESSION["argent"]=$argent;
 	$_SESSION["magasins_possedes"]=$magasins_possedes;
 	$_SESSION["magasins"]=$magasins;
@@ -84,8 +85,13 @@ function actualiser_page($initialisation=false){
 	$_SESSION["gains_par_seconde"]=$gains_par_seconde;
 	$_SESSION["temps_total_timestamp"]=$temps_total_timestamp;
 }
-if(!isset($_POST["restart"]) && !isset($_POST["magasin_a_acheter"])){ // Si l'initialiser se fait la première fois..
-	actualiser_page($initialisation=true);
+if(empty($_POST["restart"]) && empty($_POST["magasin_a_acheter"])){ // Si l'initialiser se fait la première fois..
+	if(empty($_SESSION["deja_initialise"])){	
+		actualiser_page($initialisation=true);
+	}	
+	else{
+		actualiser_page();
+	}
 }
 if(isset($_POST["restart"])){
 	actualiser_page($initialisation=true);
