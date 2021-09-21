@@ -4,14 +4,15 @@
 <title>Mon jeu IDLE.</title>
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>	
 <script>
-function Update()
+/*function Update()
 {
 	$.post("index.php");   
 }
  
 $('document').ready(function(){
-setInterval('Update();',3000);
+	setInterval('Update();',3000);
 });
+*/
 </script>	
 <style type="text/css">
 .formulaire{
@@ -46,16 +47,18 @@ function actualiser_page($initialisation=false){
 		$nombre_total_de_magasins=$_SESSION["nombre_total_de_magasins"];
 		$gains_par_seconde=$_SESSION["gains_par_seconde"];
 		$temps_actualisation=$_SESSION["temps_actualisation"];
+		$gain_par_clic=$_SESSION["gain_par_clic"];
 	}
 	else{
 		$nombre_total_de_magasins=5;
 		$magasins=array("Stand de limonade","Médias", "Nettoyage de voiture", "Pizza", "Magasin de donut");	
 		$gains_par_seconde=array();
-		$argent=100.0;
+		$argent=1.0;
 		$temps_actualisation=getdate();
 		$magasins_possedes=array();
 		$magasin_a_acheter=array();
 		$prix_du_magasin=array();
+		$gain_par_clic=1;
 		for($index=0;$index<$nombre_total_de_magasins;$index++){
 			$magasins_possedes[$index]=0; //Initialisation de la valeur des magasins.
 			$magasin_a_acheter[$index]=0;//Initialisation du nombre de magasin de ce type qu'on achète.
@@ -70,10 +73,14 @@ function actualiser_page($initialisation=false){
 		$_SESSION["nombre_total_de_magasins"]=$nombre_total_de_magasins;
 		$_SESSION["gains_par_seconde"]=$gains_par_seconde;
 		$_SESSION["temps_actualisation"]=$temps_actualisation;
+		$_SESSION["gain_par_clic"]=$gain_par_clic;
 	}
 	echo "<strong> Argent :  </strong>";
 	echo $argent. " \$";
-	echo "<div class=\"formulaire\" >";//On met en forme le formulaire.
+	echo "<form action=\"index.php\" method=\"post\" >"; //On commence à mettre notre formulaire.
+	echo "<input type=\"submit\" style=\"font-size:x-large\" name=\"cliquer_pour_gain\"  value=\" Cliquer (+".$gain_par_clic.")\">";
+	echo "</form>";
+	echo "<div>";//On met en forme le formulaire.
 	echo "<form action=\"index.php\" method=\"post\" >"; //On commence à mettre notre formulaire.
 	echo "<br>";
 	for($index=0;$index<$nombre_total_de_magasins;$index++){
@@ -116,6 +123,10 @@ if(isset($_POST["magasin_a_acheter"])){
 	$nombre_total_de_magasins=$_SESSION["nombre_total_de_magasins"];
 	achat($_POST["magasin_a_acheter"],$prix_du_magasin,$argent);
 	actualiser_page();
+}
+if(isset($_POST["cliquer_pour_gain"])){
+	var_dump($_SESSION["argent"]);
+	$_SESSION["argent"]+=$_SESSION["gain_par_clic"];
 }
 
 ?>
