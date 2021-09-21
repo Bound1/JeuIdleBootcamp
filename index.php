@@ -2,21 +2,9 @@
 <html>
 <head>
 <title>Mon jeu IDLE.</title>
-<script src="https://code.jquery.com/jquery-3.6.0.js"></script>	
-<script>
-function Update()
-{
-	$.post("index.php");   
-}
- 
-$('document').ready(function(){
-	setInterval('Update();',3000);
-});
-</script>	
-<style type="text/css">
-.formulaire{
-}
-</style>
+<meta charset="utf8">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js"></script>
 </head>
 <body>
 <?php
@@ -55,6 +43,7 @@ function actualiser_page($initialisation=false){
 		$gains_par_seconde=$_SESSION["gains_par_seconde"];
 		$temps_actualisation=$_SESSION["temps_actualisation"];
 		$gain_par_clic=$_SESSION["gain_par_clic"];
+		$nombre_colonnes_formulaire_jeu=$_SESSION["nombre_colonnes_formulaire_jeu"];
 	}
 	else{
 		$nombre_total_de_magasins=5;
@@ -66,6 +55,7 @@ function actualiser_page($initialisation=false){
 		$magasin_a_acheter=array();
 		$prix_du_magasin=array();
 		$gain_par_clic=1;
+		$nombre_colonnes_formulaire_jeu=4;
 		for($index=0;$index<$nombre_total_de_magasins;$index++){
 			$magasins_possedes[$index]=0; //Initialisation de la valeur des magasins.
 			$magasin_a_acheter[$index]=0;//Initialisation du nombre de magasin de ce type qu'on achète.
@@ -81,18 +71,25 @@ function actualiser_page($initialisation=false){
 		$_SESSION["gains_par_seconde"]=$gains_par_seconde;
 		$_SESSION["temps_actualisation"]=$temps_actualisation;
 		$_SESSION["gain_par_clic"]=$gain_par_clic;
+		$_SESSION["nombre_colonnes_formulaire_jeu"]=$nombre_colonnes_formulaire_jeu;
 	}
 	echo "<strong> Argent :  </strong>";
 	echo $argent. " \$";
 	echo "<form action=\"index.php\" method=\"post\" >"; //On commence à mettre notre formulaire.
-	echo "<input type=\"submit\" style=\"font-size:x-large\" name=\"cliquer_pour_gain\"  value=\" Cliquer (+".$gain_par_clic.")\">";
+	echo "<input type=\"submit\" style=\"font-size:x-large\" name=\"cliquer_pour_gain\"  value=\" Cliquer (+".$gain_par_clic.")";
+	echo "/Mettre à jour\">";	
 	echo "</form>";
-	echo "<div>";//On met en forme le formulaire.
+	echo "<div class=\"container\">";//On met le formulaire dans un container grâce à Bootstrap.
 	echo "<form action=\"index.php\" method=\"post\" >"; //On commence à mettre notre formulaire.
 	echo "<br>";
 	for($index=0;$index<$nombre_total_de_magasins;$index++){
+		$au_debut_de_la_ligne=( ($index % $nombre_colonnes_formulaire_jeu) == 0);
+		if($au_debut_de_la_ligne){
+			echo "<div class=\"row\">"; 
+		}
+		echo "<div class=\"col\">";
 		echo $magasins[$index]." : ". "<br>"; // On affiche le texte lié au magasin.			
-		echo "<input type=\"number\" name=\""."magasin_a_acheter[$index]"; //On nomme le formulaire pour acheter des magasins.
+		echo "<input type=\"number\" name=\""."magasin_a_acheter[$index] class= \"form-control"; //On nomme le formulaire pour acheter des magasins.
 		echo "\" value=\"0\"/>"; //On assigne la valeur 0 à chacun des champs.
 		echo "<br>";
 		echo "Prix : ".$prix_du_magasin[$index]; // On affiche les prix du magasin.
@@ -101,6 +98,11 @@ function actualiser_page($initialisation=false){
 		echo "<br>\n";
 		echo "Rendement par seconde : " . $gains_par_seconde[$index];
 		echo "<br>\n";
+		$a_la_fin_de_la_ligne=( ($index % $nombre_colonnes_formulaire_jeu) == $nombre_total_de_magasins - 1);
+		if($a_la_fin_de_la_ligne){
+			echo "</div>";		
+		}
+		echo "</div>";
 	}	
 	echo "<input type=submit value=\"Acheter des magasins.\">"; //On affiche le bouton "Acheter des magasins".
 	echo "<br><br>";
