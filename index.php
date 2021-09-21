@@ -2,6 +2,17 @@
 <html>
 <head>
 <title>Mon jeu IDLE.</title>
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>	
+<script>
+function Update()
+{
+	$.post("index.php");   
+}
+ 
+$('document').ready(function(){
+setInterval('Update();',3000);
+});
+</script>	
 <style type="text/css">
 .formulaire{
 }
@@ -34,13 +45,14 @@ function actualiser_page($initialisation=false){
 		$prix_du_magasin=$_SESSION["prix_du_magasin"];
 		$nombre_total_de_magasins=$_SESSION["nombre_total_de_magasins"];
 		$gains_par_seconde=$_SESSION["gains_par_seconde"];
-		$temps_total_timestamp=$_SESSION["temps_total_timestamp"];
+		$temps_actualisation=$_SESSION["temps_actualisation"];
 	}
 	else{
 		$nombre_total_de_magasins=5;
 		$magasins=array("Stand de limonade","Médias", "Nettoyage de voiture", "Pizza", "Magasin de donut");	
 		$gains_par_seconde=array();
 		$argent=100.0;
+		$temps_actualisation=getdate();
 		$magasins_possedes=array();
 		$magasin_a_acheter=array();
 		$prix_du_magasin=array();
@@ -49,7 +61,15 @@ function actualiser_page($initialisation=false){
 			$magasin_a_acheter[$index]=0;//Initialisation du nombre de magasin de ce type qu'on achète.
 			$prix_du_magasin[$index]=pow(10,$index); // Initialisation des prix.
 			$gains_par_seconde[$index]=$prix_du_magasin[$index]/2;
-		}
+		}		
+		$_SESSION["deja_initialise"]=true;
+		$_SESSION["argent"]=$argent;
+		$_SESSION["magasins_possedes"]=$magasins_possedes;
+		$_SESSION["magasins"]=$magasins;
+		$_SESSION["prix_du_magasin"]=$prix_du_magasin;
+		$_SESSION["nombre_total_de_magasins"]=$nombre_total_de_magasins;
+		$_SESSION["gains_par_seconde"]=$gains_par_seconde;
+		$_SESSION["temps_actualisation"]=$temps_actualisation;
 	}
 	echo "<strong> Argent :  </strong>";
 	echo $argent. " \$";
@@ -76,14 +96,6 @@ function actualiser_page($initialisation=false){
 	echo "<input type=\"submit\" name=\"restart\" value=\"Recommencer le jeu.\">";
 	echo "</form>";
 	echo "<p style=\"color:red\">Cette action est irréversible.</p>";
-	$_SESSION["deja_initialise"]=true;
-	$_SESSION["argent"]=$argent;
-	$_SESSION["magasins_possedes"]=$magasins_possedes;
-	$_SESSION["magasins"]=$magasins;
-	$_SESSION["prix_du_magasin"]=$prix_du_magasin;
-	$_SESSION["nombre_total_de_magasins"]=$nombre_total_de_magasins;
-	$_SESSION["gains_par_seconde"]=$gains_par_seconde;
-	$_SESSION["temps_total_timestamp"]=$temps_total_timestamp;
 }
 if(empty($_POST["restart"]) && empty($_POST["magasin_a_acheter"])){ // Si l'initialiser se fait la première fois..
 	if(empty($_SESSION["deja_initialise"])){	
@@ -105,6 +117,7 @@ if(isset($_POST["magasin_a_acheter"])){
 	achat($_POST["magasin_a_acheter"],$prix_du_magasin,$argent);
 	actualiser_page();
 }
+
 ?>
 </body>
 </html>
