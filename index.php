@@ -22,14 +22,12 @@ function arrondir_dollars($value){
 	return floor($value*100)/100;
 }
 function nombre_en_couleur($nombre){
-	$couleur_RGB=array("red" => 0,"green" => 0,"blue" => 0);
 	$couleur_RGB["bleu"]=$nombre % 256;
 	$couleur_RGB["vert"]= floor($nombre / 256) % 256;
 	$couleur_RGB["rouge"]=((floor($nombre / 256) % 256) / 256) % 256;
 	return $couleur_RGB;
 }
 function achat($nombre_magasins_tableau,$prix_tableau,$argent_restant){
-	$argent=$argent_restant;
 	for($index=0;$index<count($nombre_magasins_tableau);$index++){
 		$argent = $argent - $nombre_magasins_tableau[$index]*$prix_tableau[$index];
 		$_SESSION["magasins_possedes"][$index]+=$nombre_magasins_tableau[$index];
@@ -39,7 +37,6 @@ function achat($nombre_magasins_tableau,$prix_tableau,$argent_restant){
 	}
 	$argent=arrondir_dollars($argent);
 	$_SESSION["argent"]=$argent;
-	return true;
 }
 function secondes_passes(){
 	$temps_initial=$_SESSION["temps_actualisation"];
@@ -78,7 +75,7 @@ function actualiser_page($initialisation=false){
 			$prix_du_magasin[$index]=arrondir_dollars($prix_du_magasin[$index]);
 			$gains_par_seconde[$index]=$prix_du_magasin[$index]/2;
 			$gains_par_seconde[$index]=arrondir_dollars($gains_par_seconde[$index]);
-		}		
+	}		
 		$_SESSION["deja_initialise"]=true;
 		$_SESSION["argent"]=$argent;
 		$_SESSION["magasins_possedes"]=$magasins_possedes;
@@ -89,56 +86,59 @@ function actualiser_page($initialisation=false){
 		$_SESSION["temps_actualisation"]=$temps_actualisation;
 		$_SESSION["gain_par_clic"]=$gain_par_clic;
 		$_SESSION["nombre_colonnes_formulaire_jeu"]=$nombre_colonnes_formulaire_jeu;
-	}
-	echo "<div class=\"en_tete\">";
-	echo 	"<span class=\"etiquette\"> Argent : </span>" . $argent . " \$";
-	echo 		"<br>";
-	echo 	"<form action=\"index.php\" method=\"post\" >"; //On commence à mettre notre formulaire.
-	echo		"<input type=\"submit\" style=\"font-size:x-large\" name=\"cliquer_pour_gain\"  value=\" Cliquer (+".$gain_par_clic.")";
-	echo 			"/Mettre à jour\">";	
-	echo 	"</form>";
-	echo "<div class=\"container\">";//On met le formulaire dans un container grâce à Bootstrap.
-	echo 		"<form action=\"index.php\" method=\"post\" >"; //On commence à mettre notre formulaire.
-	echo "<br>";
+}
+?>
+<div class="en_tete">
+	<span class="etiquette"> Argent : </span><?php echo $argent ?> $ <br>
+	<form action="index.php" method="post" >
+		<input type="submit" style="font-size:x-large" name="cliquer_pour_gain"  value=" Cliquer (+ <?php echo $gain_par_clic;?>)/Mettre à jour" >	
+	</form>
+</div>
+<div class="container">
+	<form action="index.php" method="post" > <br>
+<?php
 	for($index=0;$index<$nombre_total_de_magasins;$index++){
 		$nombre_correspondant_a_la_couleur=floor( ((256  * 256 * 256 - 1) / 1.2 / $nombre_total_de_magasins) * $index);
 		$nombre_converti_en_couleur=nombre_en_couleur($nombre_correspondant_a_la_couleur);
 		$transparence=0.4;
 		$au_debut_de_la_ligne=( ($index % $nombre_colonnes_formulaire_jeu) == 0);
 		if($au_debut_de_la_ligne){
-			echo "<div class=\"row\">"; 
+?>
+	<div class="row">
+<?php
 		}
-		echo "<div class=\"col\"";
-		echo " style=\"background-color: rgba(" . $nombre_converti_en_couleur["rouge"] . ", " . $nombre_converti_en_couleur["vert"] . ", " . $nombre_converti_en_couleur["bleu"] . ", " . $transparence . ");\" >";
-		echo $magasins[$index]." : ". "<br>"; // On affiche le texte lié au magasin.			
-		echo "<input type=\"number\" name="."\"magasin_a_acheter[$index]\" class= \"form-control"; //On nomme le formulaire pour acheter des magasins.
-			
-		echo "\" value=\"0\">"; //On assigne la valeur 0 à chacun des champs.
-		echo "<br>";
-		echo "<span class=\"etiquette\"> Prix : </span>".$prix_du_magasin[$index]; // On affiche les prix du magasin.
-		echo "<br>";
-		echo "<span class=\"etiquette\"> Nombre possédés : </span>" . $magasins_possedes[$index];
-		echo "<br>";
-		echo "<span class=\"etiquette\">Rendement par seconde : </span>" . $gains_par_seconde[$index];
-		echo "<br>\n";
+?>
+		<div class="col" style="background-color:rgba(<?php echo $nombre_converti_en_couleur["rouge"]; ?>,<?php echo $nombre_converti_en_couleur["vert"]; ?>,<?php echo $nombre_converti_en_couleur["bleu"]?>,<?php echo $transparence;?>);">
+			<?php echo $magasins[$index];?> : <br>			
+		<input type="number" name="magasin_a_acheter[<?php echo $index?>]" class= "form-control"	 value="0"> <br>;
+		<span class="etiquette"> Prix : </span> <?php echo $prix_du_magasin[$index]; ?> <br>
+		<span class="etiquette"> Nombre possédés : </span> <?php echo $magasins_possedes[$index]; ?> <br>
+		<span class="etiquette">Rendement par seconde : </span> <?php echo $gains_par_seconde[$index];?> <br>
+<?php
 		$a_la_fin_de_la_ligne=( ($index % $nombre_colonnes_formulaire_jeu) == $nombre_total_de_magasins - 1);
 		if($a_la_fin_de_la_ligne){
-			echo "</div>";		
+?>
+	</div>
+<?php
 		}
-		echo "</div>";
-	}	
-	echo "</div>";
-	echo "<form action=\"index.php\" method=\"post\" >";
-	echo "<input type=submit value=\"Acheter des magasins.\">"; //On affiche le bouton "Acheter des magasins".
-	echo "<br><br>";
-	echo "</form>";
-	echo "</div>";
-	echo "<form action=\"index.php\" method=\"post\" >";
-	echo "<input type=\"submit\" name=\"restart\" value=\"Recommencer le jeu.\">";
-	echo "</form>";
-	echo "<p style=\"color:red\">Cette action est irréversible.</p>";
+?>
+</div>
+<?php
 }
-if(!isset($_POST["restart"]) && !isset($_POST["magasin_a_acheter"])){ // Si l'initialiser se fait la première fois..
+?>
+</div>
+<form action="index.php" method="post">
+	<input type=submit value="Acheter des magasins."><br>
+</form>
+<form action="index.php" method="post" >
+	<input type="submit" name="restart" value="Recommencer le jeu.">
+</form>
+<p style="color:red">Cette action est irréversible.</p>
+<?php
+}
+?>
+<?php
+if(!isset($_POST["restart"]) && !isset($_POST["magasin_a_acheter"]) && !isset($_POST["cliquer_pour_gain"])){ // Si l'initialiser se fait la première fois..
 	if(!isset($_SESSION["deja_initialise"])){	
 		actualiser_page($initialisation=true);
 	}	
@@ -163,6 +163,7 @@ if(isset($_POST["magasin_a_acheter"])){
 }
 if(isset($_POST["cliquer_pour_gain"])){
 	$_SESSION["argent"]+=$_SESSION["gain_par_clic"];
+	actualiser_page();
 }
 $nombre_secondes_passes=secondes_passes();
 for($index=0;$index<$_SESSION["nombre_total_de_magasins"];$index++){
