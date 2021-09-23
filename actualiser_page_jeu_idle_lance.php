@@ -90,7 +90,8 @@ function actualiser_page($initialisation=false){
 <form action="<?php echo $_SERVER["REQUEST_URI"];?>" method="post">
 	<input type=submit value="Acheter des magasins."><br>
 </form>
-<br><br>
+<br>
+<br>
 <form action="<?php echo $_SERVER["REQUEST_URI"];?>" method="post" >
 	<input type="submit" name="restart" value="Recommencer le jeu.">
 </form>

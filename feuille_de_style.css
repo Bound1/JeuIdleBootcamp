@@ -5,3 +5,12 @@
 	display:block;
 	text-align:center;
 }
+.centrage_affichage_compte{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.centrage_mot_connexion_affichage_compte{
+    text-align : center;
+}

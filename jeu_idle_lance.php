@@ -1,18 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Mon jeu IDLE.</title>
+<title>Mon jeu IDLE</title>
 <meta charset="utf8">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css">
 <link rel="stylesheet" href="feuille_de_style.css">
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js"></script>
 <style>
 </style>
 </head>
 <body>
-<?php include_once "actualiser_page.php";?>
-<?php include_once "fonctions_diverses.php";?>
+<?php include_once "actualiser_page_jeu_idle_lance.php";?>
+<?php include_once "fonctions_diverses_jeu_idle.php";?>
 <?php
 session_start();
 if(!isset($_POST["restart"]) && !isset($_POST["magasin_a_acheter"]) && !isset($_POST["cliquer_pour_gain"])){
