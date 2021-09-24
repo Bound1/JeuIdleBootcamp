@@ -14,3 +14,6 @@
 .centrage_mot_connexion_affichage_compte{
     text-align : center;
 }
+.bouton_parametrage{
+    background-image: url("settings.png");
+}

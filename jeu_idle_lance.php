@@ -12,9 +12,14 @@
 <body>
 <?php include_once "actualiser_page_jeu_idle_lance.php";?>
 <?php include_once "fonctions_diverses_jeu_idle.php";?>
+<?php include_once "parametres.php";?>
 <?php
 session_start();
-if(!isset($_POST["restart"]) && !isset($_POST["magasin_a_acheter"]) && !isset($_POST["cliquer_pour_gain"])){
+if(!isset($_SESSION["nom_utilisateur"]) || !isset($_SESSION["mot_de_passe"])){	
+	header("Location: index.php");
+	die();
+}
+if(!isset($_POST["restart"]) && !isset($_POST["magasin_a_acheter"]) && !isset($_POST["cliquer_pour_gain"]) && !isset($_POST["sauvegarder"]) && !isset($_POST["supprimer_le_compte"]) && !isset($_POST["se_deconnecter"])){
 	if(!isset($_SESSION["deja_initialise"])){	
 		actualiser_page($initialisation=true);
 	}	
@@ -40,6 +45,23 @@ if(isset($_POST["magasin_a_acheter"])){
 if(isset($_POST["cliquer_pour_gain"])){
 	$_SESSION["argent"]+=$_SESSION["gain_par_clic"];
     actualiser_page();
+}
+if(isset($_POST["sauvegarder"])){
+	sauvegarder();
+	actualiser_page();
+}
+if(isset($_POST["supprimer_le_compte"])){	
+	$compte_supprime=supprimer_le_compte();
+	if($compte_supprime==true){
+        header("Location: index.php");
+        die();
+	}
+}
+if(isset($_POST["se_deconnecter"])){
+	unset($_SESSION["nom_utilisateur"]);
+	unset($_SESSION["mot_de_passe"]);
+	header("Location: index.php");
+    die();
 }
 $nombre_secondes_passes=secondes_passes();
 for($index=0;$index<$_SESSION["nombre_total_de_magasins"];$index++){

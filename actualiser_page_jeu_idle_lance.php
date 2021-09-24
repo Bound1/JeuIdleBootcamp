@@ -96,6 +96,15 @@ function actualiser_page($initialisation=false){
 	<input type="submit" name="restart" value="Recommencer le jeu.">
 </form>
 <p style="color:red">Cette action est irréversible.</p>
+<form action="<?php echo $_SERVER["REQUEST_URI"];?>" method="post">
+	<input type=submit name="sauvegarder" value="Sauvegarder"><br>
+</form>
+<form action="<?php echo $_SERVER["REQUEST_URI"];?>" method="post">
+	<input type=submit name="supprimer_le_compte" value="Supprimer le compte"><br>
+</form>
+<form action="<?php echo $_SERVER["REQUEST_URI"];?>" method="post">
+	<input type=submit name="se_deconnecter" value="Se déconnecter"><br>
+</form>
 <?php
 }
 ?>

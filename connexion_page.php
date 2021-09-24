@@ -28,9 +28,8 @@ if(!isset($_POST["nom_utilisateur"]) && !isset($_POST["mot_de_passe"])){
 else{
     $_POST["nom_utilisateur"]=htmlspecialchars($_POST["nom_utilisateur"]);
     $_POST["mot_de_passe"]=htmlspecialchars($_POST["mot_de_passe"]);
-    $connexion=connexion_base_de_donnees($_POST["nom_utilisateur"],$_POST["mot_de_passe"],"sauvegarde");
+    $connexion=connexion_base_de_donnees($_POST["nom_utilisateur"],$_POST["mot_de_passe"]);
     if($connexion!=NULL){
-        $_SESSION=$connexion;
         header("Location: jeu_idle_lance.php");
         die();
     }

@@ -12,7 +12,7 @@ function achat($nombre_magasins_tableau,$prix_tableau,$argent_restant){
 	for($index=0;$index<count($nombre_magasins_tableau);$index++){
 		$argent = $argent - $nombre_magasins_tableau[$index]*$prix_tableau[$index];
 		$_SESSION["magasins_possedes"][$index]+=$nombre_magasins_tableau[$index];
-		if($argent<0){
+		if($argent<=0){
 			$argent=$argent_restant;	
 		}
 	}
