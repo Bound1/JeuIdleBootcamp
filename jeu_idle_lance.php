@@ -66,6 +66,7 @@ if(isset($_POST["se_deconnecter"])){
 $nombre_secondes_passes=secondes_passes();
 for($index=0;$index<$_SESSION["nombre_total_de_magasins"];$index++){
 	$_SESSION["argent"]+=$_SESSION["magasins_possedes"][$index]*$_SESSION["gains_par_seconde"][$index]*$nombre_secondes_passes;
+	$_SESSION["argent"]=arrondir_dollars($_SESSION["argent"]);
 }
 ?>
 </body>

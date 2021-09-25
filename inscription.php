@@ -15,7 +15,7 @@ function inscription_base_de_donnees($nom_utilisateur,$mot_de_passe){
     if($requete_sql_a_executer->connect_error){
         return NULL;
     }
-    $_preparation_de_la_requete=$requete_sql_a_executer->bind_param("ss",$nom_utilisateur,$mot_de_passe);
+    $preparation_de_la_requete=$requete_sql_a_executer->bind_param("ss",$nom_utilisateur,$mot_de_passe);
     if(!$preparation_de_la_requete){
         return NULL;
     }
