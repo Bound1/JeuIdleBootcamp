@@ -10,11 +10,13 @@ function nombre_en_couleur($nombre){
 }
 function achat($nombre_magasins_tableau,$prix_tableau,$argent_restant){
 	for($index=0;$index<count($nombre_magasins_tableau);$index++){
-		$argent = $argent - $nombre_magasins_tableau[$index]*$prix_tableau[$index];
+		$argent = $argent - $nombre_magasins_tableau[$index] * $prix_tableau[$index];
 		$_SESSION["magasins_possedes"][$index]+=$nombre_magasins_tableau[$index];
 		if($argent<=0){
 			$argent=$argent_restant;	
 		}
+		var_dump($nombre_magasins_tableau[$index]);
+		var_dump($prix_tableau[$index]);
 	}
 	$argent=arrondir_dollars($argent);
 	$_SESSION["argent"]=$argent;

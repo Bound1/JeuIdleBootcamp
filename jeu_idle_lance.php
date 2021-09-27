@@ -27,10 +27,15 @@ if(!isset($_POST["restart"]) && !isset($_POST["magasin_a_acheter"]) && !isset($_
 		actualiser_page();
 	}
 }
-if(isset($_POST["restart"])){
+if(isset($_POST["restart"])){	
+	$nom_utilisateur=$_SESSION["nom_utilisateur"];
+	$mot_de_passe=$_SESSION["mot_de_passe"];
 	session_unset();
 	session_destroy();
-	session_start();
+	session_start();	
+	$_SESSION["nom_utilisateur"]=$nom_utilisateur;
+	$_SESSION["mot_de_passe"]=$mot_de_passe;
+	sauvegarder();
 	actualiser_page($initialisation=true);
 }
 if(isset($_POST["magasin_a_acheter"])){
@@ -52,14 +57,17 @@ if(isset($_POST["sauvegarder"])){
 }
 if(isset($_POST["supprimer_le_compte"])){	
 	$compte_supprime=supprimer_le_compte();
+	session_unset();
+	session_destroy();
 	if($compte_supprime==true){
         header("Location: index.php");
         die();
 	}
 }
 if(isset($_POST["se_deconnecter"])){
-	unset($_SESSION["nom_utilisateur"]);
-	unset($_SESSION["mot_de_passe"]);
+	sauvegarder();
+	session_unset();
+	session_destroy();
 	header("Location: index.php");
     die();
 }

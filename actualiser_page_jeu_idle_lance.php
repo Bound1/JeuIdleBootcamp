@@ -1,4 +1,5 @@
 <?php
+session_start();
 function actualiser_page($initialisation=false){
 	if($initialisation==false){	
 		$argent=$_SESSION["argent"];
@@ -27,9 +28,9 @@ function actualiser_page($initialisation=false){
 			$magasin_a_acheter[$index]=0;
 			$prix_du_magasin[$index]=pow(5,$index); 
 			$prix_du_magasin[$index]=arrondir_dollars($prix_du_magasin[$index]);
-			$gains_par_seconde[$index]=$prix_du_magasin[$index]/2;
-			$gains_par_seconde[$index]=arrondir_dollars($gains_par_seconde[$index]);
-		}	
+			$gains_par_seconde[$index]=$prix_du_magasin[$index]/10;
+			$gains_par_seconde[$index]=arrondir_dollars($gains_par_seconde[$index]);	
+		}
         $_SESSION["deja_initialise"]=true;	
 		$_SESSION["argent"]=$argent;
 		$_SESSION["magasins_possedes"]=$magasins_possedes;
@@ -55,7 +56,7 @@ function actualiser_page($initialisation=false){
 		$magasin_a_acheter[$index]=0;
 		$prix_du_magasin[$index]=pow(5,$index);
 		$prix_du_magasin[$index]=arrondir_dollars($prix_du_magasin[$index]);
-		$gains_par_seconde[$index]=$prix_du_magasin[$index]/2;
+		$gains_par_seconde[$index]=$prix_du_magasin[$index]/10;
 		$gains_par_seconde[$index]=arrondir_dollars($gains_par_seconde[$index]); 
 		$nombre_correspondant_a_la_couleur=floor( ((256  * 256 * 256 - 1) / 1.2 / $nombre_total_de_magasins) * $index);
 		$nombre_converti_en_couleur=nombre_en_couleur($nombre_correspondant_a_la_couleur);
@@ -78,11 +79,11 @@ function actualiser_page($initialisation=false){
 		$a_la_fin_de_la_ligne=( ($index % $nombre_colonnes_formulaire_jeu) == $nombre_total_de_magasins - 1);
 		if($a_la_fin_de_la_ligne){
 ?>
-	</div>
+		</div>
 <?php
 		}
 ?>
-</div>
+	</div>
 <?php
 }
 ?>
