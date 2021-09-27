@@ -39,12 +39,8 @@ if(isset($_POST["restart"])){
 	actualiser_page($initialisation=true);
 }
 if(isset($_POST["magasin_a_acheter"])){
-	$argent=$_SESSION["argent"];
-	$magasins_possedes=$_SESSION["magasins_possedes"];
-	$magasins=$_SESSION["magasins"];
 	$prix_du_magasin=$_SESSION["prix_du_magasin"];
-	$nombre_total_de_magasins=$_SESSION["nombre_total_de_magasins"];
-	achat($_POST["magasin_a_acheter"],$prix_du_magasin,$argent);
+	achat($_POST["magasin_a_acheter"],$prix_du_magasin);
     actualiser_page();
 }
 if(isset($_POST["cliquer_pour_gain"])){

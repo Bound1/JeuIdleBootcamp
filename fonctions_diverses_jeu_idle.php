@@ -1,6 +1,6 @@
 <?php
-function arrondir_dollars($value){
-	return floor($value*100)/100;
+function arrondir_dollars($valeur){
+	return round($valeur,2);
 }
 function nombre_en_couleur($nombre){
 	$couleur_RGB["bleu"]=$nombre % 256;
@@ -8,18 +8,17 @@ function nombre_en_couleur($nombre){
 	$couleur_RGB["rouge"]=((floor($nombre / 256) % 256) / 256) % 256;
 	return $couleur_RGB;
 }
-function achat($nombre_magasins_tableau,$prix_tableau,$argent_restant){
+function achat($nombre_magasins_tableau,$prix_tableau){
+	$argent_a_mettre_a_jour=$_SESSION["argent"];
+	$nombre_magasin_a_mettre_a_jour=$nombre_magasins_tableau;
 	for($index=0;$index<count($nombre_magasins_tableau);$index++){
-		$argent = $argent - $nombre_magasins_tableau[$index] * $prix_tableau[$index];
+		$argent_a_mettre_a_jour -= $nombre_magasins_tableau[$index] * $prix_tableau[$index];
 		$_SESSION["magasins_possedes"][$index]+=$nombre_magasins_tableau[$index];
-		if($argent<=0){
-			$argent=$argent_restant;	
-		}
-		var_dump($nombre_magasins_tableau[$index]);
-		var_dump($prix_tableau[$index]);
 	}
-	$argent=arrondir_dollars($argent);
-	$_SESSION["argent"]=$argent;
+	if($argent_a_mettre_a_jour>=0){	
+		$argent=arrondir_dollars($argent_a_mettre_a_jour);
+		$_SESSION["argent"]=$argent;
+	}
 }
 function secondes_passes(){
 	$temps_initial=$_SESSION["temps_actualisation"];
