@@ -13,10 +13,12 @@ function achat($nombre_magasins_tableau,$prix_tableau){
 	$nombre_magasin_a_mettre_a_jour=$nombre_magasins_tableau;
 	for($index=0;$index<count($nombre_magasins_tableau);$index++){
 		$argent_a_mettre_a_jour -= $nombre_magasins_tableau[$index] * $prix_tableau[$index];
-		$_SESSION["magasins_possedes"][$index]+=$nombre_magasins_tableau[$index];
 	}
 	if($argent_a_mettre_a_jour>=0){	
 		$argent=arrondir_dollars($argent_a_mettre_a_jour);
+		for($index=0;$index<count($nombre_magasins_tableau);$index++){
+			$_SESSION["magasins_possedes"][$index]+=$nombre_magasins_tableau[$index];
+		}
 		$_SESSION["argent"]=$argent;
 	}
 }

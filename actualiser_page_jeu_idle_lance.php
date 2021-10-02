@@ -13,8 +13,8 @@ function actualiser_page($initialisation=false){
 		$nombre_colonnes_formulaire_jeu=$_SESSION["nombre_colonnes_formulaire_jeu"];
 	}
 	else{
-		$nombre_total_de_magasins=6;
-		$magasins=array("Stand de limonade","Médias", "Nettoyage de voiture", "Pizza", "Magasin de donut", "Bateaux de pêche");	
+		$magasins=array("Stand de limonade","Médias", "Nettoyage de voiture", "Pizza", "Magasin de donut", "Bateaux de pêche","Equipe de hockey","Studio de cinéma","Banques","Compagnies de pétrole","Transport en commun","Magasin de Tarik");	
+		$nombre_total_de_magasins=count($magasins);
 		$gains_par_seconde=array();
 		$argent=0.0;
 		$temps_actualisation=getdate()[0];
